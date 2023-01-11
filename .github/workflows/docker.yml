@@ -1,0 +1,44 @@
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+
+    - run: |
+      git clone https://github.com/mattermost/focalboard.git --branch main --single-branch
+      git clone https://github.com/mattermost/mattermost-server.git --branch main --single-branch
+
+    - run: |
+      echo "EXCLUDE_ENTERPRISE=\"1\"" > focalboard/.env
+      cd focalboard && rm go.work
+      cd focalboard && make setup-go-work
+
+    - run: |
+      cd focalboard && make prebuild && make
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Metadata
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: |
+          ghcr.io/yc/focal-test
+        tags: |
+          latest
+          type=semver,pattern={{major}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{version}}
+
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: focalboard
+        file: docker/Dockerfile
+        push: false
+        platforms: linux/amd64
+        tags: ${{ steps.meta.outputs.tags }}
