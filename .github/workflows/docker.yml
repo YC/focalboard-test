@@ -8,16 +8,16 @@ jobs:
     steps:
 
     - run: |
-      git clone https://github.com/mattermost/focalboard.git --branch main --single-branch
-      git clone https://github.com/mattermost/mattermost-server.git --branch main --single-branch
+        git clone https://github.com/mattermost/focalboard.git --branch main --single-branch
+        git clone https://github.com/mattermost/mattermost-server.git --branch main --single-branch
 
     - run: |
-      echo "EXCLUDE_ENTERPRISE=\"1\"" > focalboard/.env
-      cd focalboard && rm go.work
-      cd focalboard && make setup-go-work
+        echo "EXCLUDE_ENTERPRISE=\"1\"" > focalboard/.env
+        cd focalboard && rm go.work
+        cd focalboard && make setup-go-work
 
     - run: |
-      cd focalboard && make prebuild && make
+        cd focalboard && make prebuild && make
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
