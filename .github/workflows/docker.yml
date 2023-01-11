@@ -13,7 +13,7 @@ jobs:
 
     - run: |
         echo "EXCLUDE_ENTERPRISE=\"1\"" > focalboard/.env
-        cd focalboard && rm go.work
+        cd focalboard && rm -f go.work
         cd focalboard && make setup-go-work
 
     - run: |
