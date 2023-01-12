@@ -14,8 +14,9 @@ jobs:
     - run: |
         echo "EXCLUDE_ENTERPRISE=\"1\"" > focalboard/.env
         ls -la && ls -la focalboard
-        cd focalboard && rm -f go.work
-        cd focalboard && make setup-go-work
+        cd focalboard
+        rm -f go.work
+        make setup-go-work
 
     - run: |
         cd focalboard && make prebuild && make
