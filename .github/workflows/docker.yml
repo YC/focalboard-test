@@ -42,7 +42,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: focalboard
-        file: docker/Dockerfile
+        file: focalboard/docker/Dockerfile
         load: true
         push: false
         platforms: linux/amd64
